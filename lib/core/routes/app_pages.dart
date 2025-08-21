@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:minibuy/core/binding/app_binding.dart';
 import 'package:minibuy/core/routes/app_routes.dart';
 import 'package:minibuy/features/products/views/home_screen.dart';
 import 'package:minibuy/features/auth/views/login_screen.dart';
@@ -6,7 +7,11 @@ import 'package:minibuy/features/products/views/splash_screen.dart';
 
 class AppPages {
   static final routes = [
-    GetPage(name: AppRoutes.home, page: () => HomeScreen()),
+    GetPage(
+      name: AppRoutes.home,
+      page: () => HomeScreen(),
+      bindings: [AppBindings()],
+    ),
     GetPage(name: AppRoutes.login, page: () => LoginScreen()),
     GetPage(name: AppRoutes.splash, page: () => SplashScreen()),
     // GetPage(name: AppRoutes.profile, page: () => ProfileScreen()),

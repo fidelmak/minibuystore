@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Product Pages ',
+      title: 'MiniBuy',
       initialRoute: AppRoutes.splash,
       getPages: AppPages.routes,
     );

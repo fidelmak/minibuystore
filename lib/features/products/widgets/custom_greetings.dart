@@ -8,13 +8,7 @@ class ReusableGreeting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        Text('Hello $name 👋', style: TextStyle(fontSize: 18)),
-        Text(
-          ' Let\'s start shopping!',
-          style: TextStyle(fontSize: 18, color: Colors.grey),
-        ),
-      ],
+      children: [Text(' Hello $name 👋', style: TextStyle(fontSize: 18))],
     );
   }
 }

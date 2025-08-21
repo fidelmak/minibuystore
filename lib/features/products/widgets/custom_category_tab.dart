@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ReusableCategoryItem extends StatelessWidget {
-  final IconData image;
+  final Image image;
   final String text;
   final String price;
   final String discount;
@@ -19,7 +19,7 @@ class ReusableCategoryItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(image, size: 50),
+          Image(image: NetworkImage(image.toString()), height: 50, width: 50),
           Text(discount),
           Text(text),
           Text(price),
