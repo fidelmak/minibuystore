@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         'Error',
         _authController.errorMessage,
         backgroundColor: Colors.red,
-        colorText: Colors.white,
+        colorText: Colors.black87,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         'Error',
         'Please enter your email address first',
         backgroundColor: Colors.orange,
-        colorText: Colors.white,
+        colorText: Colors.black87,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
         'Success',
         _authController.successMessage,
         backgroundColor: Colors.green,
-        colorText: Colors.white,
+        colorText: Colors.black87,
         snackPosition: SnackPosition.BOTTOM,
       );
     } else {
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         'Error',
         _authController.errorMessage,
         backgroundColor: Colors.red,
-        colorText: Colors.white,
+        colorText: Colors.black87,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -84,13 +84,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1A1A1A),
+      backgroundColor: Colors.grey[20],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
         ),
       ),
       body: Padding(
@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Colors.black87,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -125,9 +125,9 @@ class _LoginPageState extends State<LoginPage> {
                 label: 'Email',
                 hintText: 'Enter your email',
                 controller: _emailController,
-                labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                labelStyle: TextStyle(color: Colors.black87, fontSize: 16),
                 borderColor: Colors.grey[600],
-                focusedBorderColor: Color(0xff007198),
+                focusedBorderColor: Color(0xFFF17547),
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(height: 20),
@@ -137,9 +137,9 @@ class _LoginPageState extends State<LoginPage> {
                 label: 'Password',
                 hintText: 'Enter your password',
                 controller: _passwordController,
-                labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                labelStyle: TextStyle(color: Colors.black87, fontSize: 16),
                 borderColor: Colors.grey[600],
-                focusedBorderColor: Color(0xff007198),
+                focusedBorderColor: Color(0xFFF17547),
               ),
               SizedBox(height: 10),
 
@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: _forgotPassword,
                   child: Text(
                     'Forgot Password?',
-                    style: TextStyle(color: Color(0xff007198)),
+                    style: TextStyle(color: Color(0xFFF17547)),
                   ),
                 ),
               ),
@@ -162,14 +162,14 @@ class _LoginPageState extends State<LoginPage> {
                     ? Center(
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            Color(0xff007198),
+                            Color(0xFFF17547),
                           ),
                         ),
                       )
                     : CustomButton(
                         text: 'LOGIN',
                         onPressed: _login,
-                        color: Color(0xff007198),
+                        color: Color(0xFFF17547),
                         textColor: Colors.white,
                         padding: EdgeInsets.symmetric(vertical: 16),
                       ),
@@ -189,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       'Sign Up',
                       style: TextStyle(
-                        color: Color(0xff007198),
+                        color: Color(0xFFF17547),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:minibuy/core/binding/app_binding.dart';
 import 'package:minibuy/core/routes/app_routes.dart';
+import 'package:minibuy/features/auth/views/registration_screen.dart';
 import 'package:minibuy/features/create_products/views/create_product_page.dart';
 import 'package:minibuy/features/products/views/cart_page.dart';
 import 'package:minibuy/features/products/views/home_screen.dart';
@@ -25,7 +26,7 @@ class AppPages {
     ),
     // GetPage(name: AppRoutes.profile, page: () => ProfileScreen()),
     // GetPage(name: AppRoutes.onboarding, page: () => OnboardingScreen()),
-    // GetPage(name: AppRoutes.register, page: () => RegisterScreen()),
+    GetPage(name: AppRoutes.register, page: () => RegistrationPage()),
     // GetPage(name: AppRoutes.forgotPassword, page: () => ForgotPasswordScreen()),
     // GetPage(name: AppRoutes.resetPassword, page: () => ResetPasswordScreen()),
     // GetPage(name: AppRoutes.allproduct, page: () => AllProductScreen()),

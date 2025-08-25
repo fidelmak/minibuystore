@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:minibuy/features/auth/controllers/auth_provider.dart';
-// import your auth controller here
-// import 'path_to_your_auth_controller.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -111,7 +112,7 @@ class _SplashScreenState extends State<SplashScreen>
                       'MiniBuy',
                       style: TextStyle(
                         fontSize: 36,
-                        color: Color(0xff007198),
+                        color: Color(0xFFF17547),
                         fontWeight: FontWeight.bold,
                         letterSpacing: 2.0,
                       ),
@@ -148,7 +149,7 @@ class _SplashScreenState extends State<SplashScreen>
                   children: [
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xff007198),
+                        Color(0xFFF17547),
                       ),
                       strokeWidth: 3,
                     ),
@@ -171,7 +172,7 @@ class _SplashScreenState extends State<SplashScreen>
     if (_authController.isLoading) {
       return 'Checking authentication...';
     } else if (_authController.isLoggedIn) {
-      return 'Welcome back, ${_authController.currentUser?.username ?? 'User'}!';
+      return 'Welcome back, ${_authController.currentUser?.email ?? 'User'}!';
     } else {
       return 'Redirecting to login...';
     }
@@ -188,12 +189,12 @@ class ReusableLogo extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Color(0xff007198).withOpacity(0.3),
+            color: Color(0xFFF17547).withOpacity(0.3),
             blurRadius: 20,
             spreadRadius: 5,
           ),
         ],
-        border: Border.all(color: Color(0xff007198).withOpacity(0.5), width: 3),
+        border: Border.all(color: Color(0xFFF17547).withOpacity(0.5), width: 3),
         image: DecorationImage(
           image: AssetImage('assets/images/minimart.jpeg'),
           fit: BoxFit.cover,
@@ -258,7 +259,7 @@ class _EnhancedSplashScreenState extends State<EnhancedSplashScreen>
       if (_authController.isLoggedIn && _authController.currentUser != null) {
         setState(() {
           _statusMessage =
-              'Welcome back, ${_authController.currentUser?.username}!';
+              'Welcome back, ${_authController.currentUser?.email}!';
         });
 
         // Short delay to show welcome message
@@ -345,7 +346,7 @@ class _EnhancedSplashScreenState extends State<EnhancedSplashScreen>
                               'MiniBuy'.substring(0, value),
                               style: TextStyle(
                                 fontSize: 38,
-                                color: Color(0xff007198),
+                                color: Color(0xFFF17547),
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 3.0,
                               ),
@@ -379,7 +380,7 @@ class _EnhancedSplashScreenState extends State<EnhancedSplashScreen>
                     if (_isCheckingAuth) ...[
                       CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xff007198),
+                          Color(0xFFF17547),
                         ),
                         strokeWidth: 3,
                       ),

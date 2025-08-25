@@ -39,14 +39,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
         'Error',
         'Passwords do not match',
         backgroundColor: Colors.red,
-        colorText: Colors.white,
+        colorText: Colors.black,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
     }
 
     final success = await _authController.register(
-      _usernameController.text.trim(),
       _emailController.text.trim(),
       _passwordController.text.trim(),
     );
@@ -56,7 +55,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         'Success',
         _authController.successMessage,
         backgroundColor: Colors.green,
-        colorText: Colors.white,
+        colorText: Colors.black,
         snackPosition: SnackPosition.BOTTOM,
       );
       Get.offNamed('/login'); // Go to login page
@@ -65,7 +64,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         'Error',
         _authController.errorMessage,
         backgroundColor: Colors.red,
-        colorText: Colors.white,
+        colorText: Colors.black,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -74,13 +73,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1A1A1A),
+      backgroundColor: Colors.grey[20],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.black),
         ),
       ),
       body: Padding(
@@ -99,7 +98,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -116,9 +115,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   label: 'Username',
                   hintText: 'Enter your username',
                   controller: _usernameController,
-                  labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  labelStyle: TextStyle(color: Colors.black, fontSize: 16),
+
                   borderColor: Colors.grey[600],
-                  focusedBorderColor: Color(0xff007198),
+                  focusedBorderColor: Color(0xFFF17547),
                 ),
                 SizedBox(height: 20),
 
@@ -127,9 +127,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   label: 'Email',
                   hintText: 'Enter your email',
                   controller: _emailController,
-                  labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  labelStyle: TextStyle(color: Colors.black, fontSize: 16),
                   borderColor: Colors.grey[600],
-                  focusedBorderColor: Color(0xff007198),
+                  focusedBorderColor: Color(0xFFF17547),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 SizedBox(height: 20),
@@ -139,9 +139,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   label: 'Password',
                   hintText: 'Enter your password',
                   controller: _passwordController,
-                  labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  labelStyle: TextStyle(color: Colors.black, fontSize: 16),
                   borderColor: Colors.grey[600],
-                  focusedBorderColor: Color(0xff007198),
+                  focusedBorderColor: Color(0xFFF17547),
                 ),
                 SizedBox(height: 20),
 
@@ -150,9 +150,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   label: 'Confirm Password',
                   hintText: 'Re-enter your password',
                   controller: _confirmPasswordController,
-                  labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  labelStyle: TextStyle(color: Colors.black, fontSize: 16),
                   borderColor: Colors.grey[600],
-                  focusedBorderColor: Color(0xff007198),
+                  focusedBorderColor: Color(0xFFF17547),
                 ),
                 SizedBox(height: 40),
 
@@ -162,15 +162,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ? Center(
                           child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Color(0xff007198),
+                              Color(0xFFF17547),
                             ),
                           ),
                         )
                       : CustomButton(
                           text: 'REGISTER',
                           onPressed: _register,
-                          color: Color(0xff007198),
-                          textColor: Colors.white,
+                          color: Color(0xFFF17547),
+                          textColor: Colors.black,
                           padding: EdgeInsets.symmetric(vertical: 16),
                         ),
                 ),
@@ -189,7 +189,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       child: Text(
                         'Login',
                         style: TextStyle(
-                          color: Color(0xff007198),
+                          color: Color(0xFFF17547),
                           fontWeight: FontWeight.bold,
                         ),
                       ),

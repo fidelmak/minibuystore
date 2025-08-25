@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:minibuy/features/create_products/model/create_product_model.dart';
 import 'package:minibuy/features/create_products/service/create_product_service.dart';
+import 'package:path/path.dart' as path;
 
 class CreateProductProvider extends GetxController {
   final CreateProductService _createProductService = CreateProductService();
@@ -123,6 +124,25 @@ class CreateProductProvider extends GetxController {
     } catch (e) {
       _errorMessage.value = e.toString().replaceFirst('Exception: ', '');
       return false;
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+
+  // Upload image and get URL
+  Future<String?> uploadImage(imagePath) async {
+    try {
+      _isLoading.value = true;
+      clearMessages();
+
+      final imageUrl = await _createProductService.uploadImage(
+        imagePath,
+        path.basename(imagePath),
+      );
+      return imageUrl;
+    } catch (e) {
+      _errorMessage.value = e.toString().replaceFirst('Exception: ', '');
+      return null;
     } finally {
       _isLoading.value = false;
     }

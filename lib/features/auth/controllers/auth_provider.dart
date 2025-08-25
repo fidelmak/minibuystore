@@ -79,15 +79,15 @@ class AuthController extends GetxController {
   }
 
   // Register
-  Future<bool> register(String username, String email, String password) async {
+  Future<bool> register(String email, String password) async {
     try {
       _isLoading.value = true;
       clearMessages();
 
       final request = RegistrationRequest(
-        username: username,
         email: email,
         password: password,
+        username: email.split('@')[0],
       );
 
       final user = await _authService.registerUser(request);

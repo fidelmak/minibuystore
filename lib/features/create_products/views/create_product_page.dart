@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:minibuy/features/create_products/controller/create_product_provider.dart';
 import 'package:minibuy/features/create_products/model/create_product_model.dart';
 
@@ -23,9 +25,13 @@ class _CreateProductPageState extends State<CreateProductPage> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _imageController = TextEditingController();
   final TextEditingController _ratingController = TextEditingController();
   final TextEditingController _ratingCountController = TextEditingController();
+
+  // Image picker related variables
+  final ImagePicker _imagePicker = ImagePicker();
+  File? _selectedImage;
+  String? _existingImageUrl; // For editing existing products
 
   bool get isEditing => widget.productId != null;
 
@@ -41,7 +47,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
       _priceController.text = widget.existingProduct!.price.toString();
       _descriptionController.text = widget.existingProduct!.description;
       _categoryController.text = widget.existingProduct!.category;
-      _imageController.text = widget.existingProduct!.image;
+      _existingImageUrl = widget.existingProduct!.image;
       _ratingController.text = widget.existingProduct!.rating.rate.toString();
       _ratingCountController.text = widget.existingProduct!.rating.count
           .toString();
@@ -54,7 +60,6 @@ class _CreateProductPageState extends State<CreateProductPage> {
     _priceController.dispose();
     _descriptionController.dispose();
     _categoryController.dispose();
-    _imageController.dispose();
     _ratingController.dispose();
     _ratingCountController.dispose();
     super.dispose();
@@ -68,6 +73,70 @@ class _CreateProductPageState extends State<CreateProductPage> {
         duration: Duration(seconds: 3),
       ),
     );
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      // Show options to pick from camera or gallery
+      final ImageSource? source = await _showImageSourceDialog();
+      if (source == null) return;
+
+      final XFile? pickedImage = await _imagePicker.pickImage(
+        source: source,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+
+      if (pickedImage != null) {
+        setState(() {
+          _selectedImage = File(pickedImage.path);
+          _existingImageUrl =
+              null; // Clear existing image URL when new image is selected
+        });
+      }
+    } catch (e) {
+      _showMessage('Error picking image: $e', true);
+    }
+  }
+
+  Future<ImageSource?> _showImageSourceDialog() async {
+    return await showDialog<ImageSource>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Image Source'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () => Navigator.of(context).pop(ImageSource.camera),
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _removeImage() {
+    setState(() {
+      _selectedImage = null;
+      _existingImageUrl = null;
+    });
   }
 
   Future<void> _saveProduct() async {
@@ -84,12 +153,27 @@ class _CreateProductPageState extends State<CreateProductPage> {
       }
     }
 
+    // Handle image upload
+    String? imageUrl;
+    if (_selectedImage != null) {
+      // Upload the selected image and get the URL
+      // You'll need to implement this in your controller
+      imageUrl = await _controller.uploadImage(_selectedImage!.path);
+      if (imageUrl == null) {
+        _showMessage('Failed to upload image', true);
+        return;
+      }
+    } else if (_existingImageUrl != null) {
+      // Keep the existing image URL for editing
+      imageUrl = _existingImageUrl;
+    }
+
     final product = CreateProductModel(
       title: _titleController.text.trim(),
       price: double.tryParse(_priceController.text.trim()) ?? 0.0,
       description: _descriptionController.text.trim(),
       category: _categoryController.text.trim(),
-      image: _imageController.text.trim(),
+      image: imageUrl ?? '', // Use uploaded image URL or empty string
       rating: Rating(
         rate: double.tryParse(_ratingController.text.trim()) ?? 0.0,
         count: int.tryParse(_ratingCountController.text.trim()) ?? 0,
@@ -120,9 +204,12 @@ class _CreateProductPageState extends State<CreateProductPage> {
     _priceController.clear();
     _descriptionController.clear();
     _categoryController.clear();
-    _imageController.clear();
     _ratingController.clear();
     _ratingCountController.clear();
+    setState(() {
+      _selectedImage = null;
+      _existingImageUrl = null;
+    });
     _controller.clearMessages();
   }
 
@@ -160,12 +247,161 @@ class _CreateProductPageState extends State<CreateProductPage> {
     }
   }
 
+  Widget _buildImageSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Product Image',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
+        ),
+        SizedBox(height: 12),
+
+        // Image preview container
+        Container(
+          height: 200,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xff9CA3AF)),
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.grey[50],
+          ),
+          child: _selectedImage != null || _existingImageUrl != null
+              ? Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: _selectedImage != null
+                          ? Image.file(
+                              _selectedImage!,
+                              width: double.infinity,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              _existingImageUrl!,
+                              width: double.infinity,
+                              height: 200,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[200],
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.error, color: Colors.red),
+                                        Text('Failed to load image'),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value:
+                                            loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                            ),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          onPressed: _removeImage,
+                          padding: EdgeInsets.all(4),
+                          constraints: BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : InkWell(
+                  onTap: _pickImage,
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.add_photo_alternate,
+                          size: 48,
+                          color: Color(0xFFF17547),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Tap to add image',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFFF17547),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Camera or Gallery',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+        ),
+
+        // Change image button (shown when image is selected)
+        if (_selectedImage != null || _existingImageUrl != null) ...[
+          SizedBox(height: 12),
+          Center(
+            child: TextButton.icon(
+              onPressed: _pickImage,
+              icon: Icon(Icons.edit, size: 18),
+              label: Text('Change Image'),
+              style: TextButton.styleFrom(foregroundColor: Color(0xFFF17547)),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Product' : 'Create Product'),
-        backgroundColor: Color(0xff007198),
+        backgroundColor: Color(0xFFF17547),
         foregroundColor: Colors.white,
         actions: isEditing
             ? [IconButton(icon: Icon(Icons.delete), onPressed: _deleteProduct)]
@@ -205,12 +441,8 @@ class _CreateProductPageState extends State<CreateProductPage> {
                     ),
                     SizedBox(height: 16),
 
-                    // Image URL Field
-                    CustomTextField(
-                      label: 'Image URL',
-                      hintText: 'Enter image URL',
-                      controller: _imageController,
-                    ),
+                    // Image Section (replaced image URL field)
+                    _buildImageSection(),
                     SizedBox(height: 16),
 
                     // Description Field
@@ -250,7 +482,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide(color: Color(0xff007198)),
+                              borderSide: BorderSide(color: Color(0xFFF17547)),
                             ),
                           ),
                         ),
@@ -310,65 +542,12 @@ class _CreateProductPageState extends State<CreateProductPage> {
                                 ? 'Update Product'
                                 : 'Create Product',
                             onPressed: _saveProduct,
-                            color: Color(0xff007198),
+                            color: Color(0xFFF17547),
                             textColor: Colors.white,
                           ),
                         ),
                       ],
                     ),
-
-                    // Image Preview
-                    if (_imageController.text.isNotEmpty) ...[
-                      SizedBox(height: 24),
-                      Text(
-                        'Image Preview',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff9CA3AF)),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            _imageController.text,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey[200],
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.error, color: Colors.red),
-                                      Text('Failed to load image'),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value:
-                                      loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
 
                     SizedBox(height: 32),
                   ],
@@ -389,7 +568,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
                         children: [
                           CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Color(0xff007198),
+                              Color(0xFFF17547),
                             ),
                           ),
                           SizedBox(height: 16),
@@ -412,7 +591,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
   }
 }
 
-// Custom TextField Widget (already provided by user)
+// Custom TextField Widget (unchanged)
 class CustomTextField extends StatelessWidget {
   final String label;
   final String hintText;
@@ -481,7 +660,7 @@ class CustomTextField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               borderSide: BorderSide(
-                color: focusedBorderColor ?? Color(0xff007198),
+                color: focusedBorderColor ?? Color(0xFFF17547),
               ),
             ),
           ),
@@ -491,7 +670,7 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-// Custom Button Widget (already provided by user)
+// Custom Button Widget (unchanged)
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;

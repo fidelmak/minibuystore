@@ -1,6 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:minibuy/features/create_products/model/create_product_model.dart';
+import 'package:path/path.dart' as path;
 
 class CreateProductService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -166,6 +171,33 @@ class CreateProductService {
       return querySnapshot.docs.isNotEmpty;
     } catch (e) {
       throw Exception('Failed to check product existence: $e');
+    }
+  }
+
+  Future<String> uploadImage(String filePath, String productId) async {
+    try {
+      // Upload to Firebase Storage
+      final file = File(filePath);
+      final ref = FirebaseStorage.instance.ref().child(
+        'product_images/${DateTime.now().millisecondsSinceEpoch}_${path.basename(file.path)}',
+      );
+
+      await ref.putFile(file);
+      final imageUrl = await ref.getDownloadURL();
+
+      // Store URL in Firestore
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId)
+          .update({
+            'imageUrl': imageUrl,
+            'updatedAt': FieldValue.serverTimestamp(),
+          });
+
+      return imageUrl;
+    } catch (e) {
+      print('Upload and store error: $e');
+      return '';
     }
   }
 }

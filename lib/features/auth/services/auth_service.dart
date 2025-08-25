@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:minibuy/features/auth/models/user_model.dart';
 
 class AuthService {
+  final FirebaseAuth _firebase = FirebaseAuth.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -13,6 +15,7 @@ class AuthService {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   // Login user
+
   Future<UserModel> loginUser(LoginRequest request) async {
     try {
       final credential = await _auth.signInWithEmailAndPassword(
@@ -45,7 +48,7 @@ class AuthService {
   // Register user
   Future<UserModel> registerUser(RegistrationRequest request) async {
     try {
-      final credential = await _auth.createUserWithEmailAndPassword(
+      final credential = await _firebase.createUserWithEmailAndPassword(
         email: request.email,
         password: request.password,
       );
@@ -56,7 +59,8 @@ class AuthService {
 
       final user = UserModel(
         uid: credential.user!.uid,
-        username: request.username,
+        username: request.email.split('@')[0], // Simple username from email
+
         email: request.email,
         createdAt: DateTime.now(),
       );
@@ -115,7 +119,6 @@ class AuthService {
   Future<UserModel> updateUserProfile(UserModel user) async {
     try {
       await _firestore.collection('users').doc(user.uid).update({
-        'username': user.username,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 

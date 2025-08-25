@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minibuy/features/auth/controllers/auth_provider.dart';
 import 'package:minibuy/features/products/controllers/cart_provider.dart';
 import 'package:minibuy/features/products/controllers/product_provider.dart';
 import 'package:minibuy/features/products/widgets/custom_drawer.dart';
@@ -53,21 +54,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AuthController _authController = Get.find<AuthController>();
     return Scaffold(
       drawer: CustomDrawer(
         profileImage:
             'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50',
-        userName: 'PaulFidelis',
+        userName: _authController.currentUser?.username ?? 'Guest User',
+        email: _authController.currentUser?.email ?? ' No Email',
         items: [
           DrawerItem(label: 'Home', icon: Icons.home, index: 0),
           DrawerItem(label: 'Categories', icon: Icons.category, index: 1),
           DrawerItem(label: 'Cart', icon: Icons.shopping_cart, index: 2),
           DrawerItem(label: 'Profile', icon: Icons.person, index: 3),
+
           DrawerItem(
             label: "Admin",
             icon: Icons.admin_panel_settings,
             index: 4,
           ),
+          DrawerItem(label: "logout", icon: Icons.logout, index: 5),
         ],
         onItemSelected: (index) {
           Navigator.pop(context); // Close the drawer
@@ -86,6 +91,11 @@ class _HomeScreenState extends State<HomeScreen> {
               break;
             case 4:
               Get.toNamed('/create_product');
+              break;
+            case 5:
+              _authController.logout();
+              Get.offAllNamed('/login');
+              break;
           }
         },
       ),
@@ -180,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         ),
-        title: ReusableGreeting(name: 'PaulFidelis'),
+        title: ReusableGreeting(
+          name: _authController.currentUser?.username ?? 'Guest User',
+        ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomDrawer extends StatelessWidget {
   final String profileImage;
   final String userName;
+  final String email;
   final List<DrawerItem> items;
   final Function(int) onItemSelected;
 
@@ -10,6 +11,7 @@ class CustomDrawer extends StatelessWidget {
     super.key,
     required this.profileImage,
     required this.userName,
+    required this.email,
     required this.items,
     required this.onItemSelected,
   });
@@ -23,7 +25,7 @@ class CustomDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             decoration: BoxDecoration(color: Color(0xFFF17547)),
             accountName: Text(userName),
-            accountEmail: Text('user@example.com'),
+            accountEmail: Text(email),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(profileImage),
             ),
