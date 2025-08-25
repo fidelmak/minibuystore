@@ -40,11 +40,11 @@ class ProductProvider extends GetxController {
       errorMessage.value = ''; // Clear previous error messages
       final categories = await productService.allCategory();
       this.categories.assignAll(categories);
-      print("Categories fetched successfully: ${categories.length} items");
+
       return categories; // Return the categories
     } catch (e) {
       errorMessage.value = e.toString();
-      print("Error fetching categories: $e");
+
       return []; // Return an empty list on error
     } finally {
       isLoading.value = false;

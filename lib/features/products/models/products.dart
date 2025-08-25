@@ -7,6 +7,8 @@ class MiniProducts {
   final String image;
   final Rating? rating;
 
+  dynamic quantity;
+
   MiniProducts({
     required this.id,
     required this.title,
@@ -15,6 +17,7 @@ class MiniProducts {
     required this.category,
     required this.image,
     this.rating,
+    this.quantity = 1,
   });
 
   factory MiniProducts.fromJson(Map<String, dynamic> json) {
@@ -26,6 +29,27 @@ class MiniProducts {
       category: json['category'],
       image: json['image'],
       rating: json['rating'] != null ? Rating.fromJson(json['rating']) : null,
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {'title': title, 'price': price, 'description': description};
+  }
+
+  MiniProducts copyWith({
+    String? id,
+    String? name,
+    dynamic price,
+    String? imageUrl,
+    int? quantity,
+  }) {
+    return MiniProducts(
+      id: int.parse(id ?? this.id.toString()),
+      title: name ?? this.title,
+      price: price ?? this.price,
+      image: imageUrl ?? this.image,
+      quantity: quantity ?? this.quantity,
+      description: this.description,
+      category: this.category,
     );
   }
 }

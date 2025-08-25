@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "203475343681",
+    "project_id": "ferrous-record-421116",
+    "storage_bucket": "ferrous-record-421116.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203475343681:android:ca24f76122e8e9ed4329c0",
+        "android_client_info": {
+          "package_name": "com.example.minibuy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATw5kqqfB4bwTQrR32qICeBM5Gybhe6y4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
