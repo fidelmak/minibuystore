@@ -170,7 +170,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           text: 'REGISTER',
                           onPressed: _register,
                           color: Color(0xFFF17547),
-                          textColor: Colors.black,
+                          textColor: Colors.white,
                           padding: EdgeInsets.symmetric(vertical: 16),
                         ),
                 ),
