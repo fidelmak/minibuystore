@@ -53,102 +53,104 @@ class ProductDetails extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.network(product.image, height: 200, width: 200),
-              SizedBox(height: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(product.image, height: 200, width: 200),
+                SizedBox(height: 20),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Text(
+                      product.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      " ₦",
+                      style: TextStyle(color: Colors.black, fontSize: 24),
+                    ),
+
+                    SizedBox(width: 20),
+                    Text(
+                      "${product.price}",
+                      style: TextStyle(
+                        color: Color(0xFFF17547),
+                        fontSize: 56,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(28.0),
                   child: Text(
-                    product.title,
-                    textAlign: TextAlign.center,
+                    " ${product.description}",
+                    textAlign: TextAlign.left,
+
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                       color: Colors.black,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    " ₦",
-                    style: TextStyle(color: Colors.black, fontSize: 24),
-                  ),
+                SizedBox(height: 20),
 
-                  SizedBox(width: 20),
-                  Text(
-                    "${product.price}",
-                    style: TextStyle(
-                      color: Color(0xFFF17547),
-                      fontSize: 56,
-                      fontWeight: FontWeight.bold,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 50,
+                  child: CustomButton(
+                    text: "Add to Cart",
+                    onPressed: () {
+                      cartContoller.addToCart(product);
+                      Get.snackbar(
+                        "Success",
+                        "${product.title} added to cart",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.white,
+                        colorText: Colors.green,
+
+                        duration: Duration(seconds: 2),
+                        borderRadius: 8,
+                        margin: EdgeInsets.all(16),
+                        boxShadows: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      );
+                    },
+                    color: Color(0xFFF17547),
+                    textColor: Colors.white,
+
+                    borderRadius: 8.0,
+                    elevation: 2.0,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 2,
+                      horizontal: 2,
                     ),
                   ),
-                ],
-              ),
-
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(28.0),
-                child: Text(
-                  " ${product.description}",
-                  textAlign: TextAlign.left,
-
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 50,
-                child: CustomButton(
-                  text: "Add to Cart",
-                  onPressed: () {
-                    cartContoller.addToCart(product);
-                    Get.snackbar(
-                      "Success",
-                      "${product.title} added to cart",
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Colors.white,
-                      colorText: Colors.green,
-
-                      duration: Duration(seconds: 2),
-                      borderRadius: 8,
-                      margin: EdgeInsets.all(16),
-                      boxShadows: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    );
-                  },
-                  color: Color(0xFFF17547),
-                  textColor: Colors.white,
-
-                  borderRadius: 8.0,
-                  elevation: 2.0,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 2,
-                    horizontal: 2,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

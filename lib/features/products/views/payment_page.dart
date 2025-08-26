@@ -19,7 +19,7 @@ class Checkout extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Get.offAllNamed("/product");
+                Get.offAllNamed("/home");
                 cartContoller.cartItems
                     .clear(); // Clear the cart after checkout
                 cartContoller.totalAmount.value = 0.0; // Reset total amount

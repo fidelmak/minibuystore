@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
               break;
             case 3:
               // Navigate to Profile screen
-              Get.toNamed('/profile');
+              Get.toNamed('/create_product');
               break;
           }
         },
